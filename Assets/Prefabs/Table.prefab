@@ -419,8 +419,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5549540102022615719}
   serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
+  m_Mass: 3
+  m_Drag: 0.05
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -439,6 +439,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 315f2555210a99b46addfd27f6e849de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myDistanceModifier: 0.5
 --- !u!114 &2632110933055434416
 MonoBehaviour:
   m_ObjectHideFlags: 0
