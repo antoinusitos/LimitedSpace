@@ -56,12 +56,14 @@ public class PlayerAction : MonoBehaviour
             if (takeable != null)
             {
                 myObjectTaken = takeable.transform;
+                takeable.Take();
             }
         }
     }
 
     private void ReleaseObject()
     {
+        myObjectTaken.GetComponent<Takeable>().Release();
         myObjectTaken = null;
     }
 }

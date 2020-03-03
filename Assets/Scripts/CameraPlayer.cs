@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Photon.Pun;
+using UnityEngine;
 
 public class CameraPlayer : MonoBehaviour 
 {
@@ -16,6 +17,8 @@ public class CameraPlayer : MonoBehaviour
 
     private bool        myInvertMouse = true;
     private bool        myCanMove = true;
+
+    private PhotonView  myPhotonView = null;
     #endregion
 
     #region Unity Methods
@@ -25,10 +28,17 @@ public class CameraPlayer : MonoBehaviour
         myCanMove = myCanMoveAtStart;
 
         Cursor.lockState = CursorLockMode.Locked;
+        myPhotonView = GetComponent<PhotonView>();
+
+        if (!myPhotonView.IsMine)
+            myTransformToRotate.GetChild(0).gameObject.SetActive(false);
     }
 	
 	private void Update () 
 	{
+        if (!myPhotonView.IsMine)
+            return;
+
         if (Input.GetKeyDown(KeyCode.I))
         {
             myInvertMouse = !myInvertMouse;

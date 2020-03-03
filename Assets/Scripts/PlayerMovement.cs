@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Photon.Pun;
+using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -10,13 +11,19 @@ public class PlayerMovement : MonoBehaviour
     private Vector3         myDir = Vector3.zero;
     private Rigidbody       myBody = null;
 
+    private PhotonView      myPhotonView = null;
+
     private void Start()
     {
         myBody = GetComponent<Rigidbody>();
+        myPhotonView = GetComponent<PhotonView>();
     }
 
     private void Update()
     {
+        if (!myPhotonView.IsMine)
+            return;
+
         myDir = Vector3.zero;
 
         if (Input.GetKey(KeyCode.Z))
@@ -39,6 +46,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!myPhotonView.IsMine)
+            return;
+
         myBody.MovePosition(myBody.position + myDir.normalized * mySpeed * Time.fixedDeltaTime);
     }
 }

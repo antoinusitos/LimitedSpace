@@ -36,5 +36,7 @@ MonoBehaviour:
   - RespawnSpaceship
   - RPC_SendTimer
   - RPC_CreatePlayer
+  - Rpc_Take
+  - Rpc_Release
   DisableAutoOpenWizard: 1
   ShowSettings: 0

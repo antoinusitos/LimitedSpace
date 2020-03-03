@@ -687,8 +687,8 @@ MonoBehaviour:
   myMinPlayersToStart: 2
   myPlayerCountDisplay: {fileID: 1783201367}
   myTimerToStartDisplay: {fileID: 1320156974}
-  myMaxWaitTime: 10
-  myMaxFullGameTime: 10
+  myMaxWaitTime: 5
+  myMaxFullGameTime: 5
   myNameGridLayout: {fileID: 1677495458}
   myNameTextPrefab: {fileID: 2026507813080229723, guid: 2719f86dea6d69644a860caafb167a26,
     type: 3}
