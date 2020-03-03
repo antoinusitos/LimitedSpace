@@ -684,7 +684,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myMultiplayerSceneIndex: 2
   myMenuSceneIndex: 0
-  myMinPlayersToStart: 2
+  myMinPlayersToStart: 1
   myPlayerCountDisplay: {fileID: 1783201367}
   myTimerToStartDisplay: {fileID: 1320156974}
   myMaxWaitTime: 5

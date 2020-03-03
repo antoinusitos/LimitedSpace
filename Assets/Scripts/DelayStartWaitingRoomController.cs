@@ -133,7 +133,7 @@ public class DelayStartWaitingRoomController : MonoBehaviourPunCallbacks
 
     private void WaitingForMorePlayers()
     {
-        if(myPlayerCount <= 1)
+        if(myPlayerCount <= 0)
         {
             ResetTimer();
         }

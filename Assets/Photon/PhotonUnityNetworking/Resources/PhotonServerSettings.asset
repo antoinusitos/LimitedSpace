@@ -39,4 +39,4 @@ MonoBehaviour:
   - Rpc_Take
   - Rpc_Release
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
