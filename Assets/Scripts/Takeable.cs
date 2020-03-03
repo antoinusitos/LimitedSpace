@@ -3,11 +3,14 @@ using UnityEngine;
 
 public class Takeable : MonoBehaviour
 {
-    private Transform myPlaceToGo = null;
+    private Transform   myPlaceToGo = null;
 
-    private Rigidbody myBody = null;
+    private Rigidbody   myBody = null;
 
-    private PhotonView myPhotonView = null;
+    private PhotonView  myPhotonView = null;
+
+    [SerializeField]
+    private int         myPoints = 10;
 
     private void Start()
     {
@@ -38,5 +41,10 @@ public class Takeable : MonoBehaviour
     private void Rpc_Release()
     {
         GetComponent<Rigidbody>().useGravity = true;
+    }
+
+    public int GetPoints()
+    {
+        return myPoints;
     }
 }
