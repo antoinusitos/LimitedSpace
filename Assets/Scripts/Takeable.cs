@@ -3,24 +3,23 @@ using UnityEngine;
 
 public class Takeable : MonoBehaviour
 {
+    private Transform   myPlaceToGo = null;
+
+    private Rigidbody   myBody = null;
+
+    private PhotonView  myPhotonView = null;
+
     [SerializeField]
-    private float myDistanceModifier = 0f;
-
-    private Transform myPlaceToGo = null;
-
-    private Rigidbody myBody = null;
-
-    private PhotonView myPhotonView = null;
+    private int         myPoints = 10;
 
     private void Start()
     {
         myPhotonView = GetComponent<PhotonView>();
-        myBody = GetComponent<Rigidbody>();
     }
 
     public void Take()
     {
-        myBody.useGravity = false;
+        GetComponent<Rigidbody>().useGravity = false;
         myPhotonView.RequestOwnership();
         myPhotonView.RPC("Rpc_Take", RpcTarget.Others);
     }
@@ -28,12 +27,12 @@ public class Takeable : MonoBehaviour
     [PunRPC]
     private void Rpc_Take()
     {
-        myBody.useGravity = false;
+        GetComponent<Rigidbody>().useGravity = false;
     }
 
     public void Release()
     {
-        myBody.useGravity = true;
+        GetComponent<Rigidbody>().useGravity = true;
         myPhotonView.TransferOwnership(0);
         myPhotonView.RPC("Rpc_Release", RpcTarget.Others);
     }
@@ -41,11 +40,11 @@ public class Takeable : MonoBehaviour
     [PunRPC]
     private void Rpc_Release()
     {
-        myBody.useGravity = true;
+        GetComponent<Rigidbody>().useGravity = true;
     }
 
-    public float GetDistanceModifier()
+    public int GetPoints()
     {
-        return myDistanceModifier;
+        return myPoints;
     }
 }
