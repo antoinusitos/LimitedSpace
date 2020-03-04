@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
 
     private PhotonView      myPhotonView = null;
 
+    private bool            myCanMove = true;
+
     private void Start()
     {
         myBody = GetComponent<Rigidbody>();
@@ -21,6 +23,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (!myCanMove)
+            return;
+
         if (!myPhotonView.IsMine)
             return;
 
@@ -46,9 +51,17 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!myCanMove)
+            return;
+
         if (!myPhotonView.IsMine)
             return;
 
         myBody.MovePosition(myBody.position + myDir.normalized * mySpeed * Time.fixedDeltaTime);
+    }
+
+    public void SetCanMove(bool aNewState)
+    {
+        myCanMove = aNewState;
     }
 }

@@ -478,6 +478,7 @@ GameObject:
   - component: {fileID: 2145521934903380503}
   - component: {fileID: 9047790452172721558}
   - component: {fileID: 3594851595983365987}
+  - component: {fileID: 5294512338935366071}
   m_Layer: 0
   m_Name: Armoire
   m_TagString: Untagged
@@ -534,6 +535,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 315f2555210a99b46addfd27f6e849de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myBody: {fileID: 0}
   myPoints: 40
   myDistanceModifier: 0
 --- !u!114 &9047790452172721558
@@ -552,7 +554,7 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 2
   ObservedComponents:
   - {fileID: 3594851595983365987}
   viewIdField: 0
@@ -573,6 +575,22 @@ MonoBehaviour:
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
+--- !u!114 &5294512338935366071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 839440443573041945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 1
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
 --- !u!1 &839440443795878304
 GameObject:
   m_ObjectHideFlags: 0

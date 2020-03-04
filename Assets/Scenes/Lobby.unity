@@ -682,13 +682,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58a893fd7b48fb14ab14aab61b06e522, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myMultiplayerSceneIndex: 3
+  myMultiplayerSceneIndex: 2
   myMenuSceneIndex: 0
   myMinPlayersToStart: 1
   myPlayerCountDisplay: {fileID: 1783201367}
   myTimerToStartDisplay: {fileID: 1320156974}
-  myMaxWaitTime: 5
-  myMaxFullGameTime: 5
+  myMaxWaitTime: 20
+  myMaxFullGameTime: 20
   myNameGridLayout: {fileID: 1677495458}
   myNameTextPrefab: {fileID: 2026507813080229723, guid: 2719f86dea6d69644a860caafb167a26,
     type: 3}

@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 120474267814264485}
   - component: {fileID: 7428202509749192009}
   - component: {fileID: 7501879317546896654}
+  - component: {fileID: 5881621557930350870}
   m_Layer: 0
   m_Name: Book
   m_TagString: Untagged
@@ -165,3 +166,19 @@ MonoBehaviour:
   myBody: {fileID: 0}
   myPoints: 10
   myDistanceModifier: -0.25
+--- !u!114 &5881621557930350870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3541097740095990249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 1
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3

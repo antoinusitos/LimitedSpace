@@ -385,6 +385,7 @@ GameObject:
   - component: {fileID: 5549540102022615712}
   - component: {fileID: 2632110933055434416}
   - component: {fileID: -4338772365579602152}
+  - component: {fileID: 5549540100601049983}
   m_Layer: 0
   m_Name: Table
   m_TagString: Untagged
@@ -439,6 +440,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 315f2555210a99b46addfd27f6e849de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myBody: {fileID: 0}
   myPoints: 50
   myDistanceModifier: 0.5
 --- !u!114 &2632110933055434416
@@ -478,6 +480,22 @@ MonoBehaviour:
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
+--- !u!114 &5549540100601049983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5549540102022615719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 1
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
 --- !u!1 &5549540102149389180
 GameObject:
   m_ObjectHideFlags: 0
