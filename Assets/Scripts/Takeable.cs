@@ -6,6 +6,8 @@ public class Takeable : MonoBehaviour
 
     private Transform   myPlaceToGo = null;
 
+    [Tooltip("Will search for a rigidbody on the same GameObject if left empty")]
+    [SerializeField]
     private Rigidbody   myBody = null;
 
     private PhotonView  myPhotonView = null;
@@ -19,7 +21,8 @@ public class Takeable : MonoBehaviour
     private void Start()
     {
         myPhotonView = GetComponent<PhotonView>();
-        myBody = GetComponent<Rigidbody>();
+        if(myBody==null)
+            myBody = GetComponent<Rigidbody>();
     }
 
     public void Take()
@@ -56,5 +59,10 @@ public class Takeable : MonoBehaviour
     public int GetPoints()
     {
         return myPoints;
+    }
+
+    public Rigidbody GetRigidbody()
+    {
+        return myBody;
     }
 }

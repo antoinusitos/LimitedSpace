@@ -55,7 +55,7 @@ public class PlayerAction : MonoBehaviour
             }
             else
             {
-                myObjectRigidbody.velocity = (myHandlePoint.position - myObjectRigidbody.position) * myObjectVelocityModifier; //+myCameraTransform.forward * myObjectDistanceModifier);
+                myObjectRigidbody.velocity = (myHandlePoint.position - myObjectRigidbody.position + (myCameraTransform.forward * myObjectDistanceModifier)) * myObjectVelocityModifier; //+myCameraTransform.forward * myObjectDistanceModifier);
 
                 // make object face player on X axis but not Y
 
@@ -84,7 +84,7 @@ public class PlayerAction : MonoBehaviour
             if (takeable != null)
             {
                 myObjectTaken = takeable.transform;
-                myObjectRigidbody = myObjectTaken.GetComponent<Rigidbody>();
+                myObjectRigidbody = takeable.GetRigidbody();
                 myObjectDistanceModifier = takeable.GetDistanceModifier();
                 takeable.Take();
             }
@@ -96,5 +96,6 @@ public class PlayerAction : MonoBehaviour
         myObjectTaken.GetComponent<Takeable>().Release();
         myObjectTaken = null;
         myObjectRigidbody = null;
+        myObjectDistanceModifier = 0f;
     }
 }
