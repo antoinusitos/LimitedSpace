@@ -156,7 +156,7 @@ public class DelayStartWaitingRoomController : MonoBehaviourPunCallbacks
             if (myStartingGame)
                 return;
 
-            StartGame();
+            //StartGame();
         }
     }
 
@@ -167,7 +167,7 @@ public class DelayStartWaitingRoomController : MonoBehaviourPunCallbacks
         myFullGameTimer = myMaxFullGameTime;
     }
 
-    private void StartGame()
+    public void StartGame()
     {
         myStartingGame = true;
         if(!PhotonNetwork.IsMasterClient)
