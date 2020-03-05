@@ -320,8 +320,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myBody: {fileID: 3403730975607293784}
+  myIsHeavy: 1
   myPoints: 70
-  myDistanceModifier: 1
+  myZOffset: 0.5
+  myYOffset: -1
 --- !u!114 &1907859483854234621
 MonoBehaviour:
   m_ObjectHideFlags: 0

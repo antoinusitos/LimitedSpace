@@ -47,6 +47,16 @@ public class PlayerAction : MonoBehaviour
     private float myMinDistanceToPlayer = 0f;
 
     private CameraPlayer cameraPlayer;
+    private float myDistancePointer = 0.25f;
+
+    [SerializeField]
+    private float myDistancePointerSpeed = 0.2f;
+
+    [SerializeField]
+    private float myMinDistanceModifier = 0f;
+
+    [SerializeField]
+    private float myMaxDistanceModifier = 1f;
 
     private void Start()
     {
@@ -85,6 +95,19 @@ public class PlayerAction : MonoBehaviour
             bodyToThrow.velocity = Vector3.zero;
             bodyToThrow.AddForce(myCameraTransform.forward * myThrowForce, ForceMode.Impulse);
         }
+
+        if(Input.mouseScrollDelta.magnitude > 0.1f) // multiply myDistancePointerSpeed by that magnitude?
+        {
+            if(Input.mouseScrollDelta.y < 0f)
+            {
+                myDistancePointer = Mathf.Max(myDistancePointer - myDistancePointerSpeed, 0f);
+            }
+            else
+            {
+                myDistancePointer = Mathf.Min(myDistancePointer + myDistancePointerSpeed, 1f);
+            }
+            
+        }
     }
 
     private void FixedUpdate()
@@ -107,7 +130,16 @@ public class PlayerAction : MonoBehaviour
             else
             {
                 // target velocity
-                myTargetVelocity = ((myHandlePoint.position + myCameraTransform.forward * myObjectZOffset + Vector3.up * myObjectYOffset) - myObjectRigidbody.position) * myObjectVelocityModifier;
+                Vector3 bonusPositionModifier;
+                if (myObjectIsHeavy) // scrollwheel moves along Y axis
+                {
+                    bonusPositionModifier = Mathf.SmoothStep(-myMaxDistanceModifier, myMaxDistanceModifier, myDistancePointer) * Vector3.up * myObjectHeavyUpModifier;
+                }
+                else // scrollwheel moves along Z axis
+                {
+                    bonusPositionModifier = Mathf.SmoothStep(myMinDistanceModifier, myMaxDistanceModifier, myDistancePointer) * myCameraTransform.forward * myObjectLightForwardModifier;
+                }
+                myTargetVelocity = ((myHandlePoint.position + myCameraTransform.forward * myObjectZOffset + Vector3.up * myObjectYOffset) + bonusPositionModifier - myObjectRigidbody.position) * myObjectVelocityModifier;
 
                 // target rotation
                 myHandleRotation = Quaternion.RotateTowards(myPreviousHandleRotation, myHandlePoint.rotation, 360f);
@@ -136,7 +168,7 @@ public class PlayerAction : MonoBehaviour
 
                     myTargetAngularVelocity += new Vector3(Input.GetAxis("Mouse Y"), -Input.GetAxis("Mouse X"), 0f) * myObjectAngularVelocityModifier;
                     
-                    
+                    // TO ADD : translate target angular velocity from world to local space?
                 }
 
                 if (myObjectIsHeavy)
@@ -199,6 +231,7 @@ public class PlayerAction : MonoBehaviour
                 myTargetVelocity = Vector3.zero;
                 myTargetAngularVelocity = Vector3.zero;
                 myPreviousHandleRotation = myHandlePoint.rotation;
+                myDistancePointer = 0.25f;
                 takeable.Take(this);
             }
         }
