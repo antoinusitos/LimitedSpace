@@ -3,48 +3,13 @@
 public class SecondaryObjective : MonoBehaviour
 {
     [SerializeField]
-    private Takeable    myObjectToBeInside = null;
+    protected string      myText = "";
 
-    [SerializeField]
-    private string      myText = "";
+    protected bool        myObjectiveComplete = false;
 
-    private bool        myObjectiveComplete = false;
+    protected bool        myStateChanged = false;
 
-    private bool        myStateChanged = false;
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Takeable takeable = other.GetComponentInParent<Takeable>();
-        if(takeable != null)
-        {
-            if(myObjectToBeInside == takeable)
-            {
-                if(!myObjectiveComplete)
-                {
-                    myStateChanged = true;
-                }
-
-                myObjectiveComplete = true;
-            }
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        Takeable takeable = other.GetComponentInParent<Takeable>();
-        if (takeable != null)
-        {
-            if (myObjectToBeInside == takeable)
-            {
-                if (myObjectiveComplete)
-                {
-                    myStateChanged = true;
-                }
-
-                myObjectiveComplete = false;
-            }
-        }
-    }
+    
 
     public bool GetObjectiveComplete()
     {
