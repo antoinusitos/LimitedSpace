@@ -10,19 +10,48 @@ public class PlayerAction : MonoBehaviour
 
     [SerializeField]
     private Transform   myHandlePoint = null;
+    private Quaternion  myPreviousHandleRotation;
+
+    private Vector3  myTargetVelocity;
+    private Vector3  myTargetAngularVelocity;
+    private Quaternion  myTargetRotation;
+    private Quaternion  myHandleRotation;
 
     private Transform   myObjectTaken = null;
     private Rigidbody   myObjectRigidbody;
-    private float       myObjectDistanceModifier;
+    private float       myObjectZOffset;
+    private float       myObjectYOffset;
+    private bool        myObjectIsHeavy;
+
+    private bool myRotateObjectInstead = false;
 
     [SerializeField]
-    private float       myObjectRotationSpeed = 20.0f;
+    private float myThrowForce = 5f;
+
+    //[SerializeField]
+    //private float       myObjectRotationSpeed = 20.0f;
 
     [SerializeField]
     private float myObjectVelocityModifier = 1f;
+    [SerializeField]
+    private float myObjectHeavyUpModifier = 1f;
+    [SerializeField]
+    private float myObjectLightForwardModifier = 1f;
+    [SerializeField]
+    private float myObjectAngularVelocityModifier = 1f;
 
     [SerializeField]
     private float myMaxDistanceToHandlePoint;
+
+    [SerializeField]
+    private float myMinDistanceToPlayer = 0f;
+
+    private CameraPlayer cameraPlayer;
+
+    private void Start()
+    {
+        cameraPlayer = GetComponent<CameraPlayer>();
+    }
 
     private void Update()
     {
@@ -33,6 +62,28 @@ public class PlayerAction : MonoBehaviour
         else if (Input.GetMouseButtonDown(0) && myObjectTaken != null)
         {
             ReleaseObject();
+        }
+
+        if (Input.GetMouseButtonDown(2))
+        {
+            // block camera rotation
+            cameraPlayer.enabled = false;
+            // and rotate object around X and Y instead
+            myRotateObjectInstead = true;
+        }
+        else if (Input.GetMouseButtonUp(2))
+        {
+            // resume camera rotation
+            cameraPlayer.enabled = true;
+            myRotateObjectInstead = false;
+        }
+
+        if (Input.GetButtonDown("Throw"))
+        {
+            Rigidbody bodyToThrow = myObjectTaken.GetComponent<Takeable>().GetRigidbody();
+            ReleaseObject();
+            bodyToThrow.velocity = Vector3.zero;
+            bodyToThrow.AddForce(myCameraTransform.forward * myThrowForce, ForceMode.Impulse);
         }
     }
 
@@ -55,21 +106,71 @@ public class PlayerAction : MonoBehaviour
             }
             else
             {
-                myObjectRigidbody.velocity = (myHandlePoint.position - myObjectRigidbody.position + (myCameraTransform.forward * myObjectDistanceModifier)) * myObjectVelocityModifier; //+myCameraTransform.forward * myObjectDistanceModifier);
+                // target velocity
+                myTargetVelocity = ((myHandlePoint.position + myCameraTransform.forward * myObjectZOffset + Vector3.up * myObjectYOffset) - myObjectRigidbody.position) * myObjectVelocityModifier;
 
-                // make object face player on X axis but not Y
+                // target rotation
+                myHandleRotation = Quaternion.RotateTowards(myPreviousHandleRotation, myHandlePoint.rotation, 360f);
+                //myHandleRotation = myPreviousHandleRotation * myHandlePoint.rotation;
+                //Debug.Log(myHandleRotation.ToString());
+                
+                //Debug.Log(myPreviousHandleRotation.ToString()+"/"+ myHandlePoint.rotation.ToString());
 
-                if (Input.GetMouseButton(2) && myObjectTaken != null)
+                //myTargetRotation *= Quaternion.RotateTowards(myPreviousHandleRotation, myHandlePoint.rotation, 360f);
+                //myTargetRotation *= Quaternion.RotateTowards(myObjectTaken.rotation, myHandlePoint.rotation, 360f);
+
+                //myHandleRotation.eulerAngles = new Vector3(0f, myHandleRotation.eulerAngles.y, myHandleRotation.eulerAngles.z);
+                //myHandleRotation.eulerAngles = new Vector3(0f, myHandleRotation.eulerAngles.y, 0f);
+                //myHandleRotation.eulerAngles = Quaternion.FromToRotation(new Vector3(0f, myHandleRotation.eulerAngles.y, myHandleRotation.eulerAngles.z),);
+
+                //myTargetRotation *= myHandleRotation;
+                //myTargetAngularVelocity = Quaternion.RotateTowards(myObjectTaken.rotation, myTargetRotation, 360f).eulerAngles;
+                //myTargetAngularVelocity = (myObjectTaken.rotation * myHandleRotation).eulerAngles;
+
+                //debug
+                myTargetAngularVelocity = Vector3.zero;
+                //
+                if (myRotateObjectInstead)
                 {
-                    //myObjectTaken.transform.Rotate(Vector3.up, Time.fixedDeltaTime * myObjectRotationSpeed);
-                    myObjectRigidbody.AddTorque(Vector3.up * myObjectRotationSpeed * Time.fixedDeltaTime, ForceMode.VelocityChange);
+                    //myObjectRigidbody.AddTorque(Vector3.up * myObjectRotationSpeed * Time.fixedDeltaTime, ForceMode.VelocityChange);
+
+                    myTargetAngularVelocity += new Vector3(Input.GetAxis("Mouse Y"), -Input.GetAxis("Mouse X"), 0f) * myObjectAngularVelocityModifier;
+                    
+                    
                 }
 
-                if (Input.mouseScrollDelta.magnitude > 0.1f)
+                if (myObjectIsHeavy)
                 {
-                    //myObjectTaken.transform.Rotate(Vector3.right, Time.fixedDeltaTime * myObjectRotationSpeed * 5f);
-                    myObjectRigidbody.AddTorque(Vector3.right * myObjectRotationSpeed * Time.fixedDeltaTime * 5f, ForceMode.VelocityChange);
+                    // check if the object is going to get out of range
+                    if (Input.mouseScrollDelta.magnitude > 0.1f && Vector3.Distance(myHandlePoint.position + myCameraTransform.forward * myObjectZOffset + Vector3.up * myObjectYOffset, myObjectRigidbody.position + myTargetVelocity + Vector3.up * myObjectHeavyUpModifier) < myMaxDistanceToHandlePoint)
+                    {
+                        myTargetVelocity += Vector3.up * myObjectHeavyUpModifier;
+                    }
+                    // check if the object is going to get too close to player
+                    else if(Input.mouseScrollDelta.magnitude < -0.1f && Vector3.Distance(myHandlePoint.position + myCameraTransform.forward * myObjectZOffset + Vector3.up * myObjectYOffset, myObjectRigidbody.position + myTargetVelocity - Vector3.up * myObjectHeavyUpModifier) < myMaxDistanceToHandlePoint)
+                    {
+                        myTargetVelocity -= Vector3.up * myObjectHeavyUpModifier;
+                    }
                 }
+                else
+                {
+                    // check if the object is going to get out of range
+                    if (Input.mouseScrollDelta.magnitude > 0.1f && Vector3.Distance(myHandlePoint.position + myCameraTransform.forward * myObjectZOffset + Vector3.up * myObjectYOffset, myObjectRigidbody.position + myTargetVelocity + myHandlePoint.forward * myObjectLightForwardModifier) < myMaxDistanceToHandlePoint)
+                    {
+                        myTargetVelocity += myHandlePoint.forward * myObjectLightForwardModifier;
+                    }
+                    // check if the object is going to get out of range
+                    else if (Input.mouseScrollDelta.magnitude < -0.1f && Vector3.Distance(myHandlePoint.position + myCameraTransform.forward * myObjectZOffset + Vector3.up * myObjectYOffset, myObjectRigidbody.position + myTargetVelocity - myHandlePoint.forward * myObjectLightForwardModifier) > myMinDistanceToPlayer)
+                    {
+                        myTargetVelocity -= myHandlePoint.forward * myObjectLightForwardModifier;
+                    }
+                }
+
+                myObjectRigidbody.velocity = myTargetVelocity;
+                //myObjectRigidbody.angularVelocity = myTargetRotation.eulerAngles * myObjectAngularVelocityModifier;
+                myObjectRigidbody.angularVelocity = myTargetAngularVelocity;
+
+                myPreviousHandleRotation = myHandlePoint.rotation;
             }
         }
     }
@@ -83,10 +184,22 @@ public class PlayerAction : MonoBehaviour
             Takeable takeable = hit.collider.GetComponentInParent<Takeable>();
             if (takeable != null)
             {
+                PlayerAction other = takeable.GetOwner();
+                if (other != null)
+                {
+                    other.ReleaseObject();
+                }
+
                 myObjectTaken = takeable.transform;
                 myObjectRigidbody = takeable.GetRigidbody();
-                myObjectDistanceModifier = takeable.GetDistanceModifier();
-                takeable.Take();
+                myObjectZOffset = takeable.GetZOffset();
+                myObjectYOffset = takeable.GetYOffset();
+                myObjectIsHeavy = takeable.GetIsHeavy();
+                myTargetRotation = myObjectTaken.rotation;
+                myTargetVelocity = Vector3.zero;
+                myTargetAngularVelocity = Vector3.zero;
+                myPreviousHandleRotation = myHandlePoint.rotation;
+                takeable.Take(this);
             }
         }
     }
@@ -96,6 +209,7 @@ public class PlayerAction : MonoBehaviour
         myObjectTaken.GetComponent<Takeable>().Release();
         myObjectTaken = null;
         myObjectRigidbody = null;
-        myObjectDistanceModifier = 0f;
+        //myObjectZOffset = 0f;
+        //myObjectYOffset = 0f;
     }
 }

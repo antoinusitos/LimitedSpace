@@ -496,9 +496,12 @@ MonoBehaviour:
   myTakeDistance: 2
   myCameraTransform: {fileID: 5668218061752924960}
   myHandlePoint: {fileID: 9147220827602613544}
-  myObjectRotationSpeed: 50
   myObjectVelocityModifier: 5
+  myObjectHeavyUpModifier: 1
+  myObjectLightForwardModifier: 1
+  myObjectAngularVelocityModifier: 5
   myMaxDistanceToHandlePoint: 3
+  myMinDistanceToPlayer: 0.5
 --- !u!114 &6375544260381208771
 MonoBehaviour:
   m_ObjectHideFlags: 0

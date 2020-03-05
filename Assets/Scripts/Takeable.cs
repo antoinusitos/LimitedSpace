@@ -6,17 +6,27 @@ public class Takeable : MonoBehaviour
 
     private Transform   myPlaceToGo = null;
 
-    [Tooltip("Will search for a rigidbody on the same GameObject if left empty")]
+    [Tooltip("Will search for a rigidbody on the same GameObject if left empty.")]
     [SerializeField]
     private Rigidbody   myBody = null;
+
+    [Tooltip("Whether to use heavy object controls or not. Heavy = scroll moves up&down ; off = scroll moves closer and away")]
+    [SerializeField]
+    private bool myIsHeavy = false;
 
     private PhotonView  myPhotonView = null;
 
     [SerializeField]
     private int         myPoints = 10;
 
+    [Tooltip("Offset to pivot position for grabbing")]
     [SerializeField]
-    private float myDistanceModifier = 0f;
+    private float myZOffset = 0f;
+    [Tooltip("Offset to pivot position for grabbing")]
+    [SerializeField]
+    private float myYOffset = 0f;
+
+    private PlayerAction myOwner = null;
 
     private void Start()
     {
@@ -25,8 +35,9 @@ public class Takeable : MonoBehaviour
             myBody = GetComponent<Rigidbody>();
     }
 
-    public void Take()
+    public void Take(PlayerAction owner)
     {
+        myOwner = owner;
         myBody.useGravity = false;
         myPhotonView.RequestOwnership();
         myPhotonView.RPC("Rpc_Take", RpcTarget.Others);
@@ -40,6 +51,7 @@ public class Takeable : MonoBehaviour
 
     public void Release()
     {
+        myOwner = null;
         myBody.useGravity = true;
         myPhotonView.TransferOwnership(0);
         myPhotonView.RPC("Rpc_Release", RpcTarget.Others);
@@ -51,9 +63,14 @@ public class Takeable : MonoBehaviour
         myBody.useGravity = true;
     }
 
-    public float GetDistanceModifier()
+    public float GetZOffset()
     {
-        return myDistanceModifier;
+        return myZOffset;
+    }
+
+    public float GetYOffset()
+    {
+        return myYOffset;
     }
 
     public int GetPoints()
@@ -64,5 +81,20 @@ public class Takeable : MonoBehaviour
     public Rigidbody GetRigidbody()
     {
         return myBody;
+    }
+
+    public bool GetIsHeavy()
+    {
+        return myIsHeavy;
+    }
+
+    public PlayerAction GetOwner()
+    {
+        return myOwner;
+    }
+
+    public void SetOwner(PlayerAction newOwner)
+    {
+        myOwner = newOwner;
     }
 }
