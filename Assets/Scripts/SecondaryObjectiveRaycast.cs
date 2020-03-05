@@ -26,8 +26,6 @@ public class SecondaryObjectiveRaycast : SecondaryObjective
             }
             else
             {
-                Debug.Log("hit:" + hit.transform.name);
-
                 if (myObjectiveComplete)
                 {
                     myStateChanged = true;
