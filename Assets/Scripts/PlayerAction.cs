@@ -129,7 +129,7 @@ public class PlayerAction : MonoBehaviour
             }
             else
             {
-                // target velocity
+                // target velocity : 1) object pivot follows handle, 2) add an offset if needed (eg moving big item up to avoid dragging it against the ground), 3) scrollwheel adds an offset to move it closer or further from the player
                 Vector3 bonusPositionModifier;
                 if (myObjectIsHeavy) // scrollwheel moves along Y axis
                 {
@@ -141,7 +141,7 @@ public class PlayerAction : MonoBehaviour
                 }
                 myTargetVelocity = ((myHandlePoint.position + myCameraTransform.forward * myObjectZOffset + Vector3.up * myObjectYOffset) + bonusPositionModifier - myObjectRigidbody.position) * myObjectVelocityModifier;
 
-                // target rotation
+                // target rotation : 1) first target rotation is the object's first
                 myHandleRotation = Quaternion.RotateTowards(myPreviousHandleRotation, myHandlePoint.rotation, 360f);
                 //myHandleRotation = myPreviousHandleRotation * myHandlePoint.rotation;
                 //Debug.Log(myHandleRotation.ToString());
@@ -166,9 +166,12 @@ public class PlayerAction : MonoBehaviour
                 {
                     //myObjectRigidbody.AddTorque(Vector3.up * myObjectRotationSpeed * Time.fixedDeltaTime, ForceMode.VelocityChange);
 
-                    myTargetAngularVelocity += new Vector3(Input.GetAxis("Mouse Y"), -Input.GetAxis("Mouse X"), 0f) * myObjectAngularVelocityModifier;
-                    
+                    //myTargetAngularVelocity += new Vector3(Input.GetAxis("Mouse Y"), -Input.GetAxis("Mouse X"), 0f) * myObjectAngularVelocityModifier;
+
+                    myTargetRotation *= Quaternion.Euler(new Vector3(Input.GetAxis("Mouse Y"), -Input.GetAxis("Mouse X"), 0f));
+
                     // TO ADD : translate target angular velocity from world to local space?
+                    // TO ADD : translate target angular velocity from mouse space to taken object space?
                 }
 
                 if (myObjectIsHeavy)
@@ -200,9 +203,14 @@ public class PlayerAction : MonoBehaviour
 
                 myObjectRigidbody.velocity = myTargetVelocity;
                 //myObjectRigidbody.angularVelocity = myTargetRotation.eulerAngles * myObjectAngularVelocityModifier;
-                myObjectRigidbody.angularVelocity = myTargetAngularVelocity;
+                //myObjectRigidbody.angularVelocity = myTargetAngularVelocity;
+                //myObjectRigidbody.angularVelocity = Quaternion.RotateTowards(myObjectTaken.rotation, myTargetRotation, 360f).eulerAngles * Mathf.Deg2Rad;//* myObjectAngularVelocityModifier;
+                myObjectRigidbody.angularVelocity = Quaternion.FromToRotation(myObjectTaken.rotation.eulerAngles, myTargetRotation.eulerAngles).eulerAngles * Mathf.Deg2Rad;
+                // TODO : multiply angularvelocity by myObjectAngularVelocityModifier to make it stronger
 
                 myPreviousHandleRotation = myHandlePoint.rotation;
+                //Debug.Log("my current rotation = "+myObjectTaken.rotation.eulerAngles.ToString()+" | my targetRotation = "+myTargetRotation.eulerAngles.ToString()+"\nmy rotateTowards = "+ Quaternion.RotateTowards(myObjectTaken.rotation, myTargetRotation, 360f).eulerAngles.ToString()+" | my angularVelocity = " + myObjectRigidbody.angularVelocity.ToString());
+                Debug.Log("my current rotation = "+myObjectTaken.rotation.eulerAngles.ToString()+" | my targetRotation = "+myTargetRotation.eulerAngles.ToString()+"\nmy rotateTowards = "+ Quaternion.FromToRotation(myObjectTaken.rotation.eulerAngles, myTargetRotation.eulerAngles).eulerAngles.ToString()+" | my angularVelocity = " + (myObjectRigidbody.angularVelocity*Mathf.Rad2Deg).ToString());
             }
         }
     }

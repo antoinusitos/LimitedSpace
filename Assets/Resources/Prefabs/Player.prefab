@@ -498,11 +498,14 @@ MonoBehaviour:
   myHandlePoint: {fileID: 9147220827602613544}
   myThrowForce: 5
   myObjectVelocityModifier: 5
-  myObjectHeavyUpModifier: 1
+  myObjectHeavyUpModifier: 0.5
   myObjectLightForwardModifier: 1
   myObjectAngularVelocityModifier: 5
   myMaxDistanceToHandlePoint: 3
   myMinDistanceToPlayer: 0.5
+  myDistancePointerSpeed: 0.02
+  myMinDistanceModifier: -0.25
+  myMaxDistanceModifier: 1
 --- !u!114 &6375544260381208771
 MonoBehaviour:
   m_ObjectHideFlags: 0
