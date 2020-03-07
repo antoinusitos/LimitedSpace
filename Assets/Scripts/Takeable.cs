@@ -28,6 +28,8 @@ public class Takeable : MonoBehaviour
 
     private PlayerAction myOwner = null;
 
+    public static float setHeavyOverThisMass = 4.0f;
+
     private void Start()
     {
         myPhotonView = GetComponent<PhotonView>();
@@ -96,5 +98,23 @@ public class Takeable : MonoBehaviour
     public void SetOwner(PlayerAction newOwner)
     {
         myOwner = newOwner;
+    }
+
+    public void SetPoints(int value)
+    {
+        myPoints = value;
+    }
+
+    public void SetMass(float value)
+    {
+        myBody.mass = value;
+        if(value > setHeavyOverThisMass)
+        {
+            myIsHeavy = true;
+        }
+        else
+        {
+            myIsHeavy = false;
+        }
     }
 }
