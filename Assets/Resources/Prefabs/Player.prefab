@@ -554,10 +554,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0695c5c049a4bc742a236f38a2296a5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myTakeDistance: 2
+  myTakeDistance: 2.5
   myCameraTransform: {fileID: 5668218061752924960}
   myHandlePoint: {fileID: 9147220827602613544}
-  myThrowForce: 5
+  myThrowForce: 10
   myObjectVelocityModifier: 5
   myObjectHeavyUpModifier: 0.5
   myObjectLightForwardModifier: 1

@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 7d1f50ac65a049d4ea1615becfa586fc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -105,7 +105,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5045314381519403626}
   serializedVersion: 2
-  m_Mass: 0.2
+  m_Mass: 1
   m_Drag: 0.05
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -125,7 +125,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 315f2555210a99b46addfd27f6e849de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myDistanceModifier: 0
+  myBody: {fileID: 0}
+  myIsHeavy: 0
+  myPoints: 10
+  myZOffset: 0
+  myYOffset: 0
 --- !u!114 &8390949804908341378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,7 +146,7 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 2
+  OwnershipTransfer: 1
   ObservedComponents:
   - {fileID: -5786588092988368947}
   viewIdField: 0

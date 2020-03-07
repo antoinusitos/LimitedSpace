@@ -30,7 +30,7 @@ public class Takeable : MonoBehaviour
 
     public static float setHeavyOverThisMass = 4.0f;
 
-    private void Start()
+    private void Awake()
     {
         myPhotonView = GetComponent<PhotonView>();
         if(myBody==null)
