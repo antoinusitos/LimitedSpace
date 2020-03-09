@@ -889,7 +889,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58a893fd7b48fb14ab14aab61b06e522, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myMultiplayerSceneIndex: 3
+  myMultiplayerSceneIndex: 4
   myMenuSceneIndex: 0
   myMinPlayersToStart: 1
   myPlayerCountDisplay: {fileID: 1783201367}

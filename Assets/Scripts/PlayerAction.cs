@@ -141,27 +141,16 @@ public class PlayerAction : MonoBehaviour
                 }
                 myTargetVelocity = ((myHandlePoint.position + myCameraTransform.forward * myObjectZOffset + Vector3.up * myObjectYOffset) + bonusPositionModifier - myObjectRigidbody.position) * myObjectVelocityModifier;
 
-                // target rotation : 1) first target rotation is the object's first
-                myHandleRotation = Quaternion.RotateTowards(myPreviousHandleRotation, myHandlePoint.rotation, 360f);
-                //myHandleRotation = myPreviousHandleRotation * myHandlePoint.rotation;
-                //Debug.Log(myHandleRotation.ToString());
-                
-                //Debug.Log(myPreviousHandleRotation.ToString()+"/"+ myHandlePoint.rotation.ToString());
+                // target rotation : 1) follow view rotation
+                //myHandleRotation = Quaternion.RotateTowards(myPreviousHandleRotation, myHandlePoint.rotation, 360f);
+                myHandleRotation = myHandlePoint.rotation * Quaternion.Inverse(myPreviousHandleRotation);
 
-                //myTargetRotation *= Quaternion.RotateTowards(myPreviousHandleRotation, myHandlePoint.rotation, 360f);
-                //myTargetRotation *= Quaternion.RotateTowards(myObjectTaken.rotation, myHandlePoint.rotation, 360f);
-
-                //myHandleRotation.eulerAngles = new Vector3(0f, myHandleRotation.eulerAngles.y, myHandleRotation.eulerAngles.z);
-                //myHandleRotation.eulerAngles = new Vector3(0f, myHandleRotation.eulerAngles.y, 0f);
-                //myHandleRotation.eulerAngles = Quaternion.FromToRotation(new Vector3(0f, myHandleRotation.eulerAngles.y, myHandleRotation.eulerAngles.z),);
-
-                //myTargetRotation *= myHandleRotation;
-                //myTargetAngularVelocity = Quaternion.RotateTowards(myObjectTaken.rotation, myTargetRotation, 360f).eulerAngles;
-                //myTargetAngularVelocity = (myObjectTaken.rotation * myHandleRotation).eulerAngles;
-
+                /*
                 //debug
                 myTargetAngularVelocity = Vector3.zero;
-                //
+                */
+
+                // target rotation : 2) add manipulation rotation
                 if (myRotateObjectInstead)
                 {
                     //myObjectRigidbody.AddTorque(Vector3.up * myObjectRotationSpeed * Time.fixedDeltaTime, ForceMode.VelocityChange);
@@ -202,15 +191,39 @@ public class PlayerAction : MonoBehaviour
                 }
 
                 myObjectRigidbody.velocity = myTargetVelocity;
-                //myObjectRigidbody.angularVelocity = myTargetRotation.eulerAngles * myObjectAngularVelocityModifier;
-                //myObjectRigidbody.angularVelocity = myTargetAngularVelocity;
-                //myObjectRigidbody.angularVelocity = Quaternion.RotateTowards(myObjectTaken.rotation, myTargetRotation, 360f).eulerAngles * Mathf.Deg2Rad;//* myObjectAngularVelocityModifier;
-                myObjectRigidbody.angularVelocity = Quaternion.FromToRotation(myObjectTaken.rotation.eulerAngles, myTargetRotation.eulerAngles).eulerAngles * Mathf.Deg2Rad;
-                // TODO : multiply angularvelocity by myObjectAngularVelocityModifier to make it stronger
+
+                //myObjectRigidbody.angularVelocity = Quaternion.FromToRotation(myObjectTaken.rotation.eulerAngles, myTargetRotation.eulerAngles).eulerAngles * Mathf.Deg2Rad;
+                // fix if doesn't work :
+                // myObjectRigidbody.MoveRotation(myTargetRotation);
+
+                // target rotation : 3) add get angular velocity
+                // Rotations stack right to left,
+                // so first we undo our rotation, then apply the target.
+                var delta = myTargetRotation * Quaternion.Inverse(myObjectTaken.rotation);
+
+                float angle; Vector3 axis;
+                delta.ToAngleAxis(out angle, out axis);
+
+                // We get an infinite axis in the event that our rotation is already aligned.
+                if (float.IsInfinity(axis.x))
+                    return;
+
+                if (angle > 180f)
+                    angle -= 360f;
+
+                // Here I drop down to 0.9f times the desired movement,
+                // since we'd rather undershoot and ease into the correct angle
+                // than overshoot and oscillate around it in the event of errors.
+                //Vector3 angular = (0.9f * Mathf.Deg2Rad * angle / interval) * axis.normalized;
+                Vector3 angular = (0.9f * Mathf.Deg2Rad * angle / Time.fixedDeltaTime) * axis.normalized;
+
+                myObjectRigidbody.angularVelocity = angular;
+
+                // TODO : multiply angularvelocity by myObjectAngularVelocityModifier to make it faster
 
                 myPreviousHandleRotation = myHandlePoint.rotation;
                 //Debug.Log("my current rotation = "+myObjectTaken.rotation.eulerAngles.ToString()+" | my targetRotation = "+myTargetRotation.eulerAngles.ToString()+"\nmy rotateTowards = "+ Quaternion.RotateTowards(myObjectTaken.rotation, myTargetRotation, 360f).eulerAngles.ToString()+" | my angularVelocity = " + myObjectRigidbody.angularVelocity.ToString());
-                Debug.Log("my current rotation = "+myObjectTaken.rotation.eulerAngles.ToString()+" | my targetRotation = "+myTargetRotation.eulerAngles.ToString()+"\nmy rotateTowards = "+ Quaternion.FromToRotation(myObjectTaken.rotation.eulerAngles, myTargetRotation.eulerAngles).eulerAngles.ToString()+" | my angularVelocity = " + (myObjectRigidbody.angularVelocity*Mathf.Rad2Deg).ToString());
+                //Debug.Log("my current rotation = "+myObjectTaken.rotation.eulerAngles.ToString()+" | my targetRotation = "+myTargetRotation.eulerAngles.ToString()+"\nmy rotateTowards = "+ Quaternion.FromToRotation(myObjectTaken.rotation.eulerAngles, myTargetRotation.eulerAngles).eulerAngles.ToString()+" | my angularVelocity = " + (myObjectRigidbody.angularVelocity*Mathf.Rad2Deg).ToString());
             }
         }
     }

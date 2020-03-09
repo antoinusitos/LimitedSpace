@@ -850,7 +850,7 @@ MonoBehaviour:
   myBody: {fileID: 0}
   myIsHeavy: 1
   myPoints: 80
-  myZOffset: 0
+  myZOffset: 1
   myYOffset: -0.25
 --- !u!114 &1963207362537726885
 MonoBehaviour:
