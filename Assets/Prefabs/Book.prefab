@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 7501879317546896654}
   - component: {fileID: 5881621557930350870}
   - component: {fileID: -8997812375425414565}
+  - component: {fileID: 8818690638546392053}
   m_Layer: 9
   m_Name: Book
   m_TagString: Untagged
@@ -134,6 +135,7 @@ MonoBehaviour:
   OwnershipTransfer: 2
   ObservedComponents:
   - {fileID: 7428202509749192009}
+  - {fileID: 5881621557930350870}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -169,6 +171,8 @@ MonoBehaviour:
   myPoints: 10
   myZOffset: -0.25
   myYOffset: 0
+  myName: Book
+  outline: {fileID: 0}
 --- !u!114 &5881621557930350870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,3 +208,19 @@ MonoBehaviour:
   changePoints: 1
   minPointsValue: 5
   maxPointsValue: 30
+--- !u!114 &8818690638546392053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3541097740095990249}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: 0
+  eraseRenderer: 1
+  originalLayer: 0
+  originalMaterials: []

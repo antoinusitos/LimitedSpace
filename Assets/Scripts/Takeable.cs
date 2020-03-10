@@ -1,5 +1,6 @@
 ﻿using Photon.Pun;
 using UnityEngine;
+using cakeslice;
 
 public class Takeable : MonoBehaviour
 {
@@ -26,7 +27,13 @@ public class Takeable : MonoBehaviour
     [SerializeField]
     private float myYOffset = 0f;
 
+    [SerializeField]
+    private string myName;
+
     private PlayerAction myOwner = null;
+
+    [SerializeField]
+    private Outline[] outline;
 
     public static float setHeavyOverThisMass = 4.0f;
 
@@ -35,6 +42,12 @@ public class Takeable : MonoBehaviour
         myPhotonView = GetComponent<PhotonView>();
         if(myBody==null)
             myBody = GetComponent<Rigidbody>();
+        if (outline.Length == 0)
+        {
+            outline = new Outline[1];
+            outline[0] = GetComponent<Outline>();
+        }
+            
     }
 
     public void Take(PlayerAction owner)
@@ -95,6 +108,11 @@ public class Takeable : MonoBehaviour
         return myOwner;
     }
 
+    public string GetName()
+    {
+        return myName;
+    }
+
     public void SetOwner(PlayerAction newOwner)
     {
         myOwner = newOwner;
@@ -111,10 +129,23 @@ public class Takeable : MonoBehaviour
         if(value > setHeavyOverThisMass)
         {
             myIsHeavy = true;
+            for(int i = 0; i<outline.Length;i++)
+                outline[i].color = 2;
         }
         else
         {
             myIsHeavy = false;
+            for (int i = 0; i < outline.Length; i++)
+                outline[i].color = 0;
+        }
+    }
+
+    public void SetOutline(bool val)
+    {
+        for (int i = 0; i < outline.Length; i++)
+        {
+            outline[i].enabled = val;
+            outline[i].eraseRenderer = !val;
         }
     }
 }

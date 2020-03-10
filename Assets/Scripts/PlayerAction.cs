@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using TMPro;
+using cakeslice;
 
 public class PlayerAction : MonoBehaviour
 {
@@ -23,6 +25,9 @@ public class PlayerAction : MonoBehaviour
     private float       myObjectZOffset;
     private float       myObjectYOffset;
     private bool        myObjectIsHeavy;
+
+    private Takeable    myObjectInSight;
+    private Takeable    myObjectTakenScript;
 
     private bool myRotateObjectInstead = false;
 
@@ -63,6 +68,12 @@ public class PlayerAction : MonoBehaviour
     [SerializeField]
     private float myMaxDistanceModifier = 1f;
 
+    [SerializeField]
+    private LayerMask myObjectLayers;
+
+    [SerializeField]
+    private TextMeshProUGUI myObjectDescriptionText;
+
     private void Start()
     {
         cameraPlayer = GetComponent<CameraPlayer>();
@@ -71,13 +82,64 @@ public class PlayerAction : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetMouseButtonDown(0) && myObjectTaken == null)
+        RaycastHit hit;
+
+        if (Physics.Raycast(myCameraTransform.position, myCameraTransform.forward, out hit, myTakeDistance, myObjectLayers))
         {
-            TryToTake();
+            Takeable takeable = hit.collider.GetComponentInParent<Takeable>();
+            if (takeable != null)
+            {
+                if (!takeable.Equals(myObjectInSight))
+                {
+                    if(!takeable.Equals(myObjectTakenScript))
+                    {
+                        myObjectInSight = takeable;
+                        // show info
+                        myObjectDescriptionText.text = myObjectInSight.GetName() + " - <i>" + myObjectInSight.GetPoints() + " points</i>";
+                        // outline
+                        myObjectInSight.SetOutline(true);
+                    }
+                    else
+                    {
+                        if (myObjectInSight != null)
+                        {
+                            myObjectInSight.SetOutline(false);
+                            myObjectInSight = null;
+                            myObjectDescriptionText.text = "";
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (myObjectInSight != null)
+                {
+                    myObjectInSight.SetOutline(false);
+                    myObjectInSight = null;
+                    myObjectDescriptionText.text = "";
+                }
+            }
         }
-        else if (Input.GetMouseButtonDown(0) && myObjectTaken != null)
+        else
         {
-            ReleaseObject();
+            if(myObjectInSight != null)
+            {
+                myObjectInSight.SetOutline(false);
+                myObjectInSight = null;
+                myObjectDescriptionText.text = "";
+            }
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (myObjectTaken == null)
+            {
+                TryToTake();
+            }
+            else
+            {
+                ReleaseObject();
+            }
         }
 
         if (Input.GetMouseButtonDown(2))
@@ -130,15 +192,6 @@ public class PlayerAction : MonoBehaviour
             {
                 // target velocity : 1) object pivot follows handle, 2) add an offset if needed (eg moving big item up to avoid dragging it against the ground), 3) scrollwheel adds an offset to move it closer or further from the player
                 Vector3 bonusPositionModifier;
-                /*
-                if (myObjectIsHeavy) // scrollwheel moves along Y axis
-                {
-                    bonusPositionModifier = Mathf.SmoothStep(-myMaxDistanceModifier, myMaxDistanceModifier, myDistancePointer) * Vector3.up * myObjectHeavyUpModifier;
-                }
-                else // scrollwheel moves along Z axis
-                {
-                    bonusPositionModifier = Mathf.SmoothStep(myMinDistanceModifier, myMaxDistanceModifier, myDistancePointer) * myCameraTransform.forward * myObjectLightForwardModifier;
-                }*/
                 bonusPositionModifier = Mathf.SmoothStep(myMinDistanceModifier, myMaxDistanceModifier, myDistancePointer) * myCameraTransform.forward * myObjectLightForwardModifier;
                 myTargetVelocity = ((myHandlePoint.position + myCameraTransform.forward * myObjectZOffset + Vector3.up * myObjectYOffset) + bonusPositionModifier - myObjectRigidbody.position) * myObjectVelocityModifier;
 
@@ -149,34 +202,6 @@ public class PlayerAction : MonoBehaviour
                     myRotationTarget.Rotate(myCameraTransform.up, Input.GetAxis("Mouse X")*2f, Space.World);
                 }
 
-                /*
-                if (myObjectIsHeavy)
-                {
-                    // check if the object is going to get out of range
-                    if (Input.mouseScrollDelta.magnitude > 0.1f && Vector3.Distance(myHandlePoint.position + myCameraTransform.forward * myObjectZOffset + Vector3.up * myObjectYOffset, myObjectRigidbody.position + myTargetVelocity + Vector3.up * myObjectHeavyUpModifier) < myMaxDistanceToHandlePoint)
-                    {
-                        myTargetVelocity += Vector3.up * myObjectHeavyUpModifier;
-                    }
-                    // check if the object is going to get too close to player
-                    else if(Input.mouseScrollDelta.magnitude < -0.1f && Vector3.Distance(myHandlePoint.position + myCameraTransform.forward * myObjectZOffset + Vector3.up * myObjectYOffset, myObjectRigidbody.position + myTargetVelocity - Vector3.up * myObjectHeavyUpModifier) < myMaxDistanceToHandlePoint)
-                    {
-                        myTargetVelocity -= Vector3.up * myObjectHeavyUpModifier;
-                    }
-                }
-                else
-                {
-                    // check if the object is going to get out of range
-                    if (Input.mouseScrollDelta.magnitude > 0.1f && Vector3.Distance(myHandlePoint.position + myCameraTransform.forward * myObjectZOffset + Vector3.up * myObjectYOffset, myObjectRigidbody.position + myTargetVelocity + myHandlePoint.forward * myObjectLightForwardModifier) < myMaxDistanceToHandlePoint)
-                    {
-                        myTargetVelocity += myHandlePoint.forward * myObjectLightForwardModifier;
-                    }
-                    // check if the object is going to get out of range
-                    else if (Input.mouseScrollDelta.magnitude < -0.1f && Vector3.Distance(myHandlePoint.position + myCameraTransform.forward * myObjectZOffset + Vector3.up * myObjectYOffset, myObjectRigidbody.position + myTargetVelocity - myHandlePoint.forward * myObjectLightForwardModifier) > myMinDistanceToPlayer)
-                    {
-                        myTargetVelocity -= myHandlePoint.forward * myObjectLightForwardModifier;
-                    }
-                }
-                */
                 // check if the object is going to get out of range
                 if (Input.mouseScrollDelta.magnitude > 0.1f && Vector3.Distance(myHandlePoint.position + myCameraTransform.forward * myObjectZOffset + Vector3.up * myObjectYOffset, myObjectRigidbody.position + myTargetVelocity + myHandlePoint.forward * myObjectLightForwardModifier) < myMaxDistanceToHandlePoint)
                 {
@@ -210,44 +235,45 @@ public class PlayerAction : MonoBehaviour
                 // since we'd rather undershoot and ease into the correct angle
                 // than overshoot and oscillate around it in the event of errors.
                 //Vector3 angular = (0.9f * Mathf.Deg2Rad * angle / interval) * axis.normalized;
-                Vector3 angular = (0.9f * Mathf.Deg2Rad * angle / Time.fixedDeltaTime) * axis.normalized;
+                //Vector3 angular = (0.9f * Mathf.Deg2Rad * angle / Time.fixedDeltaTime) * axis.normalized;
+                myTargetAngularVelocity = (0.9f * Mathf.Deg2Rad * angle / Time.fixedDeltaTime) * axis.normalized;
 
-                myObjectRigidbody.angularVelocity = angular;
+                //myObjectRigidbody.angularVelocity = angular;
+                myObjectRigidbody.angularVelocity = myTargetAngularVelocity;
             }
         }
     }
 
     private void TryToTake()
     {
-        RaycastHit hit;
-
-        if(Physics.Raycast(myCameraTransform.position, myCameraTransform.forward, out hit, myTakeDistance))
+        if(myObjectInSight != null)
         {
-            Takeable takeable = hit.collider.GetComponentInParent<Takeable>();
-            if (takeable != null)
-            {
-                PlayerAction other = takeable.GetOwner();
-                if (other != null)
-                {
-                    other.ReleaseObject();
-                }
+            myObjectDescriptionText.text = "";
+            myObjectInSight.SetOutline(false);
 
-                myObjectTaken = takeable.transform;
-                myObjectRigidbody = takeable.GetRigidbody();
-                myObjectZOffset = takeable.GetZOffset();
-                myObjectYOffset = takeable.GetYOffset();
-                myObjectIsHeavy = takeable.GetIsHeavy();
-                myRotationTarget.rotation = myObjectTaken.rotation;
-                myTargetVelocity = Vector3.zero;
-                myTargetAngularVelocity = Vector3.zero;
-                myDistancePointer = 0.25f;
-                if (myObjectIsHeavy)
-                {
-                    playerMovement.AddMovementSpeedModifier(myObjectHeavyMovementModifier);
-                    cameraPlayer.AddMovementSpeedModifier(myObjectHeavyLookModifier);
-                } 
-                takeable.Take(this);
+            PlayerAction other = myObjectInSight.GetOwner();
+            if (other != null)
+            {
+                other.ReleaseObject();
             }
+
+            myObjectTaken = myObjectInSight.transform;
+            myObjectRigidbody = myObjectInSight.GetRigidbody();
+            myObjectZOffset = myObjectInSight.GetZOffset();
+            myObjectYOffset = myObjectInSight.GetYOffset();
+            myObjectIsHeavy = myObjectInSight.GetIsHeavy();
+            myRotationTarget.rotation = myObjectTaken.rotation;
+            myTargetVelocity = Vector3.zero;
+            myTargetAngularVelocity = Vector3.zero;
+            myDistancePointer = 0.25f;
+            if (myObjectIsHeavy)
+            {
+                playerMovement.AddMovementSpeedModifier(myObjectHeavyMovementModifier);
+                cameraPlayer.AddMovementSpeedModifier(myObjectHeavyLookModifier);
+            }
+            myObjectInSight.Take(this);
+            myObjectTakenScript = myObjectInSight;
+            myObjectInSight = null;
         }
     }
 
@@ -261,5 +287,6 @@ public class PlayerAction : MonoBehaviour
         myObjectTaken.GetComponent<Takeable>().Release();
         myObjectTaken = null;
         myObjectRigidbody = null;
+        myObjectTakenScript = null;
     }
 }

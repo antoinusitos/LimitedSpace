@@ -61,6 +61,7 @@ GameObject:
   - component: {fileID: 1963207362537726885}
   - component: {fileID: 1963207362537726884}
   - component: {fileID: 1963207362537726883}
+  - component: {fileID: -28283074898474222}
   m_Layer: 9
   m_Name: Sofa
   m_TagString: Untagged
@@ -852,6 +853,8 @@ MonoBehaviour:
   myPoints: 80
   myZOffset: 1
   myYOffset: -0.25
+  myName: Sofa
+  outline: {fileID: 0}
 --- !u!114 &1963207362537726885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -906,6 +909,22 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 1
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &-28283074898474222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1963207362537726909}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: 2
+  eraseRenderer: 1
+  originalLayer: 0
+  originalMaterials: []
 --- !u!1 &3627933615662439570
 GameObject:
   m_ObjectHideFlags: 0
