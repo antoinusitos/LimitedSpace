@@ -35,7 +35,10 @@ public class PlayerAction : MonoBehaviour
     [SerializeField]
     private float myObjectVelocityModifier = 1f;
     [SerializeField]
-    private float myObjectHeavyUpModifier = 1f;
+    //private float myObjectHeavyUpModifier = 1f;
+    private float myObjectHeavyMovementModifier = 0.5f;
+    [SerializeField]
+    private float myObjectHeavyLookModifier = 0.5f;
     [SerializeField]
     private float myObjectLightForwardModifier = 1f;
     [SerializeField]
@@ -48,6 +51,7 @@ public class PlayerAction : MonoBehaviour
     private float myMinDistanceToPlayer = 0f;
 
     private CameraPlayer cameraPlayer;
+    private PlayerMovement playerMovement;
     private float myDistancePointer = 0.25f;
 
     [SerializeField]
@@ -62,6 +66,7 @@ public class PlayerAction : MonoBehaviour
     private void Start()
     {
         cameraPlayer = GetComponent<CameraPlayer>();
+        playerMovement = GetComponent<PlayerMovement>();
     }
 
     private void Update()
@@ -107,7 +112,6 @@ public class PlayerAction : MonoBehaviour
             {
                 myDistancePointer = Mathf.Min(myDistancePointer + myDistancePointerSpeed, 1f);
             }
-            
         }
     }
 
@@ -126,6 +130,7 @@ public class PlayerAction : MonoBehaviour
             {
                 // target velocity : 1) object pivot follows handle, 2) add an offset if needed (eg moving big item up to avoid dragging it against the ground), 3) scrollwheel adds an offset to move it closer or further from the player
                 Vector3 bonusPositionModifier;
+                /*
                 if (myObjectIsHeavy) // scrollwheel moves along Y axis
                 {
                     bonusPositionModifier = Mathf.SmoothStep(-myMaxDistanceModifier, myMaxDistanceModifier, myDistancePointer) * Vector3.up * myObjectHeavyUpModifier;
@@ -133,7 +138,8 @@ public class PlayerAction : MonoBehaviour
                 else // scrollwheel moves along Z axis
                 {
                     bonusPositionModifier = Mathf.SmoothStep(myMinDistanceModifier, myMaxDistanceModifier, myDistancePointer) * myCameraTransform.forward * myObjectLightForwardModifier;
-                }
+                }*/
+                bonusPositionModifier = Mathf.SmoothStep(myMinDistanceModifier, myMaxDistanceModifier, myDistancePointer) * myCameraTransform.forward * myObjectLightForwardModifier;
                 myTargetVelocity = ((myHandlePoint.position + myCameraTransform.forward * myObjectZOffset + Vector3.up * myObjectYOffset) + bonusPositionModifier - myObjectRigidbody.position) * myObjectVelocityModifier;
 
                 // target rotation : 1) add manipulation rotation
@@ -143,6 +149,7 @@ public class PlayerAction : MonoBehaviour
                     myRotationTarget.Rotate(myCameraTransform.up, Input.GetAxis("Mouse X")*2f, Space.World);
                 }
 
+                /*
                 if (myObjectIsHeavy)
                 {
                     // check if the object is going to get out of range
@@ -168,6 +175,17 @@ public class PlayerAction : MonoBehaviour
                     {
                         myTargetVelocity -= myHandlePoint.forward * myObjectLightForwardModifier;
                     }
+                }
+                */
+                // check if the object is going to get out of range
+                if (Input.mouseScrollDelta.magnitude > 0.1f && Vector3.Distance(myHandlePoint.position + myCameraTransform.forward * myObjectZOffset + Vector3.up * myObjectYOffset, myObjectRigidbody.position + myTargetVelocity + myHandlePoint.forward * myObjectLightForwardModifier) < myMaxDistanceToHandlePoint)
+                {
+                    myTargetVelocity += myHandlePoint.forward * myObjectLightForwardModifier;
+                }
+                // check if the object is going to get out of range
+                else if (Input.mouseScrollDelta.magnitude < -0.1f && Vector3.Distance(myHandlePoint.position + myCameraTransform.forward * myObjectZOffset + Vector3.up * myObjectYOffset, myObjectRigidbody.position + myTargetVelocity - myHandlePoint.forward * myObjectLightForwardModifier) > myMinDistanceToPlayer)
+                {
+                    myTargetVelocity -= myHandlePoint.forward * myObjectLightForwardModifier;
                 }
 
                 myObjectRigidbody.velocity = myTargetVelocity;
@@ -223,6 +241,11 @@ public class PlayerAction : MonoBehaviour
                 myTargetVelocity = Vector3.zero;
                 myTargetAngularVelocity = Vector3.zero;
                 myDistancePointer = 0.25f;
+                if (myObjectIsHeavy)
+                {
+                    playerMovement.AddMovementSpeedModifier(myObjectHeavyMovementModifier);
+                    cameraPlayer.AddMovementSpeedModifier(myObjectHeavyLookModifier);
+                } 
                 takeable.Take(this);
             }
         }
@@ -230,6 +253,11 @@ public class PlayerAction : MonoBehaviour
 
     private void ReleaseObject()
     {
+        if (myObjectIsHeavy)
+        {
+            playerMovement.RemoveMovementSpeedModifier(myObjectHeavyMovementModifier);
+            cameraPlayer.RemoveMovementSpeedModifier(myObjectHeavyLookModifier);
+        }
         myObjectTaken.GetComponent<Takeable>().Release();
         myObjectTaken = null;
         myObjectRigidbody = null;

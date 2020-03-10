@@ -541,7 +541,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myCamera: {fileID: 5668218061752924960}
-  mySpeed: 3.5
+  myBaseSpeed: 3.5
 --- !u!54 &5668218062792933284
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -590,7 +590,8 @@ MonoBehaviour:
   myRotationTarget: {fileID: 2828055856684920553}
   myThrowForce: 10
   myObjectVelocityModifier: 5
-  myObjectHeavyUpModifier: 0.5
+  myObjectHeavyMovementModifier: 0.6
+  myObjectHeavyLookModifier: 0.6
   myObjectLightForwardModifier: 1
   myObjectAngularVelocityModifier: 5
   myMaxDistanceToHandlePoint: 3
