@@ -28,6 +28,9 @@ public class PlayerAction : MonoBehaviour
     [SerializeField]
     private float myThrowForce = 5f;
 
+    [SerializeField]
+    private bool garbageCamFollow = false;
+
     //[SerializeField]
     //private float       myObjectRotationSpeed = 20.0f;
 
@@ -142,25 +145,22 @@ public class PlayerAction : MonoBehaviour
                 myTargetVelocity = ((myHandlePoint.position + myCameraTransform.forward * myObjectZOffset + Vector3.up * myObjectYOffset) + bonusPositionModifier - myObjectRigidbody.position) * myObjectVelocityModifier;
 
                 // target rotation : 1) follow view rotation
-                //myHandleRotation = Quaternion.RotateTowards(myPreviousHandleRotation, myHandlePoint.rotation, 360f);
-                myHandleRotation = myHandlePoint.rotation * Quaternion.Inverse(myPreviousHandleRotation);
-
                 /*
-                //debug
-                myTargetAngularVelocity = Vector3.zero;
+                myHandleRotation = myHandlePoint.rotation * Quaternion.Inverse(myPreviousHandleRotation);
+                myTargetRotation *= myHandleRotation;
                 */
+                if (garbageCamFollow)
+                {
+                    myHandleRotation = myCameraTransform.rotation * Quaternion.Inverse(myPreviousHandleRotation);
+                    myTargetRotation *= myHandleRotation;
+                }
 
                 // target rotation : 2) add manipulation rotation
                 if (myRotateObjectInstead)
                 {
-                    //myObjectRigidbody.AddTorque(Vector3.up * myObjectRotationSpeed * Time.fixedDeltaTime, ForceMode.VelocityChange);
-
-                    //myTargetAngularVelocity += new Vector3(Input.GetAxis("Mouse Y"), -Input.GetAxis("Mouse X"), 0f) * myObjectAngularVelocityModifier;
-
-                    myTargetRotation *= Quaternion.Euler(new Vector3(Input.GetAxis("Mouse Y"), -Input.GetAxis("Mouse X"), 0f));
-
-                    // TO ADD : translate target angular velocity from world to local space?
-                    // TO ADD : translate target angular velocity from mouse space to taken object space?
+                    //myTargetRotation *= Quaternion.Euler(new Vector3(Input.GetAxis("Mouse Y"), -Input.GetAxis("Mouse X"), 0f));
+                    myTargetRotation *= Quaternion.AngleAxis(Input.GetAxis("Mouse Y"), myCameraTransform.right);
+                    myTargetRotation *= Quaternion.AngleAxis(Input.GetAxis("Mouse X"), myCameraTransform.up);
                 }
 
                 if (myObjectIsHeavy)
@@ -192,10 +192,6 @@ public class PlayerAction : MonoBehaviour
 
                 myObjectRigidbody.velocity = myTargetVelocity;
 
-                //myObjectRigidbody.angularVelocity = Quaternion.FromToRotation(myObjectTaken.rotation.eulerAngles, myTargetRotation.eulerAngles).eulerAngles * Mathf.Deg2Rad;
-                // fix if doesn't work :
-                // myObjectRigidbody.MoveRotation(myTargetRotation);
-
                 // target rotation : 3) add get angular velocity
                 // Rotations stack right to left,
                 // so first we undo our rotation, then apply the target.
@@ -218,14 +214,10 @@ public class PlayerAction : MonoBehaviour
                 Vector3 angular = (0.9f * Mathf.Deg2Rad * angle / Time.fixedDeltaTime) * axis.normalized;
 
                 myObjectRigidbody.angularVelocity = angular;
-
-                // TODO : multiply angularvelocity by myObjectAngularVelocityModifier to make it faster
-
-                myPreviousHandleRotation = myHandlePoint.rotation;
-                //Debug.Log("my current rotation = "+myObjectTaken.rotation.eulerAngles.ToString()+" | my targetRotation = "+myTargetRotation.eulerAngles.ToString()+"\nmy rotateTowards = "+ Quaternion.RotateTowards(myObjectTaken.rotation, myTargetRotation, 360f).eulerAngles.ToString()+" | my angularVelocity = " + myObjectRigidbody.angularVelocity.ToString());
-                //Debug.Log("my current rotation = "+myObjectTaken.rotation.eulerAngles.ToString()+" | my targetRotation = "+myTargetRotation.eulerAngles.ToString()+"\nmy rotateTowards = "+ Quaternion.FromToRotation(myObjectTaken.rotation.eulerAngles, myTargetRotation.eulerAngles).eulerAngles.ToString()+" | my angularVelocity = " + (myObjectRigidbody.angularVelocity*Mathf.Rad2Deg).ToString());
             }
         }
+        //myPreviousHandleRotation = myHandlePoint.rotation;
+        myPreviousHandleRotation = myCameraTransform.rotation;
     }
 
     private void TryToTake()
@@ -251,7 +243,8 @@ public class PlayerAction : MonoBehaviour
                 myTargetRotation = myObjectTaken.rotation;
                 myTargetVelocity = Vector3.zero;
                 myTargetAngularVelocity = Vector3.zero;
-                myPreviousHandleRotation = myHandlePoint.rotation;
+                //myPreviousHandleRotation = myHandlePoint.rotation;
+                myPreviousHandleRotation = myCameraTransform.rotation;
                 myDistancePointer = 0.25f;
                 takeable.Take(this);
             }

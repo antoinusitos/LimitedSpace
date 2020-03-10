@@ -558,6 +558,7 @@ MonoBehaviour:
   myCameraTransform: {fileID: 5668218061752924960}
   myHandlePoint: {fileID: 9147220827602613544}
   myThrowForce: 10
+  garbageCamFollow: 0
   myObjectVelocityModifier: 5
   myObjectHeavyUpModifier: 0.5
   myObjectLightForwardModifier: 1
