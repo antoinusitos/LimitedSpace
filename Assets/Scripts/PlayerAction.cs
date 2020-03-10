@@ -89,7 +89,7 @@ public class PlayerAction : MonoBehaviour
             myRotateObjectInstead = false;
         }
 
-        if (Input.GetButtonDown("Throw"))
+        if (Input.GetButtonDown("Throw") && myObjectTaken != null)
         {
             Rigidbody bodyToThrow = myObjectTaken.GetComponent<Takeable>().GetRigidbody();
             ReleaseObject();
