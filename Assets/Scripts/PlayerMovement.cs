@@ -57,6 +57,7 @@ public class PlayerMovement : MonoBehaviour
         if (!myPhotonView.IsMine)
             return;
 
+        myDir.y = 0f;
         myBody.MovePosition(myBody.position + myDir.normalized * mySpeed * Time.fixedDeltaTime);
     }
 
