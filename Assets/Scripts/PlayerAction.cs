@@ -10,12 +10,13 @@ public class PlayerAction : MonoBehaviour
 
     [SerializeField]
     private Transform   myHandlePoint = null;
-    private Quaternion  myPreviousHandleRotation;
+
+    [SerializeField]
+    private Transform myRotationTarget;
 
     private Vector3  myTargetVelocity;
     private Vector3  myTargetAngularVelocity;
-    private Quaternion  myTargetRotation;
-    private Quaternion  myHandleRotation;
+    //private Quaternion  myTargetRotation;
 
     private Transform   myObjectTaken = null;
     private Rigidbody   myObjectRigidbody;
@@ -27,9 +28,6 @@ public class PlayerAction : MonoBehaviour
 
     [SerializeField]
     private float myThrowForce = 5f;
-
-    [SerializeField]
-    private bool garbageCamFollow = false;
 
     //[SerializeField]
     //private float       myObjectRotationSpeed = 20.0f;
@@ -61,17 +59,9 @@ public class PlayerAction : MonoBehaviour
     [SerializeField]
     private float myMaxDistanceModifier = 1f;
 
-    private GameObject dummyRotationGO;
-    private Transform dummyRotationTransform;
-
     private void Start()
     {
         cameraPlayer = GetComponent<CameraPlayer>();
-        dummyRotationGO = new GameObject();
-        dummyRotationTransform = dummyRotationGO.transform;
-        dummyRotationTransform.SetParent(myCameraTransform);
-        dummyRotationTransform.localPosition = Vector3.zero;
-        dummyRotationTransform.localRotation = Quaternion.identity;
     }
 
     private void Update()
@@ -123,17 +113,11 @@ public class PlayerAction : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // cancel rotation other than y for first part of gimble (so that the held object stays parallel to ground)
+        myHandlePoint.eulerAngles = new Vector3(0f, myHandlePoint.eulerAngles.y, 0f);
+
         if (myObjectTaken != null)
         {
-            //myObjectTaken.transform.position = myCameraTransform.position + myCameraTransform.forward * 2f;
-            /*
-            myObjectTaken.transform.position = myHandlePoint.position;
-            myObjectTaken.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-            myObjectTaken.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            */
-
-            //myObjectRigidbody.MovePosition(myHandlePoint.position);
-            //myObjectRigidbody.MovePosition(myHandlePoint.position + myCameraTransform.forward * myObjectDistanceModifier);
             if(Vector3.Distance(myHandlePoint.position, myObjectRigidbody.position) > myMaxDistanceToHandlePoint)
             {
                 ReleaseObject();
@@ -152,48 +136,11 @@ public class PlayerAction : MonoBehaviour
                 }
                 myTargetVelocity = ((myHandlePoint.position + myCameraTransform.forward * myObjectZOffset + Vector3.up * myObjectYOffset) + bonusPositionModifier - myObjectRigidbody.position) * myObjectVelocityModifier;
 
-                // target rotation : 1) follow view rotation
-                /*
-                myHandleRotation = myHandlePoint.rotation * Quaternion.Inverse(myPreviousHandleRotation);
-                myTargetRotation *= myHandleRotation;
-                */
-                if (garbageCamFollow)
-                {
-                    myHandleRotation = myCameraTransform.rotation * Quaternion.Inverse(myPreviousHandleRotation);
-                    myTargetRotation *= myHandleRotation;
-                }
-                // following works but is the only rotation
-                //myTargetRotation.SetLookRotation(myCameraTransform.forward, Vector3.up);
-
-                // target rotation : 2) add manipulation rotation
+                // target rotation : 1) add manipulation rotation
                 if (myRotateObjectInstead)
                 {
-                    //myTargetRotation *= Quaternion.Euler(new Vector3(Input.GetAxis("Mouse Y"), -Input.GetAxis("Mouse X"), 0f));
-
-                    // following works
-                    
-                    myTargetRotation *= Quaternion.AngleAxis(Input.GetAxis("Mouse Y"), myCameraTransform.right);
-                    myTargetRotation *= Quaternion.AngleAxis(Input.GetAxis("Mouse X"), myCameraTransform.up);
-                    
-
-                    // following is fix test
-                    /*
-                    dummyRotationTransform.SetParent(myObjectTaken);
-                    dummyRotationTransform.localPosition = Vector3.zero;
-                    dummyRotationTransform.localRotation = Quaternion.identity;
-                    //dummyRotationTransform.rotation = myTargetRotation;
-                    dummyRotationTransform.Rotate(myCameraTransform.right, Input.GetAxis("Mouse Y")*2f, Space.World);
-                    dummyRotationTransform.Rotate(myCameraTransform.up, Input.GetAxis("Mouse X")*2f, Space.World);
-                    //myTargetRotation.SetLookRotation();
-                    myTargetRotation *= dummyRotationTransform.rotation;
-                    */
-                    
-                    // works but doesn't use angular velocity
-                    /*
-                    myObjectTaken.Rotate(myCameraTransform.right, Input.GetAxis("Mouse Y")*2f, Space.World);
-                    myObjectTaken.Rotate(myCameraTransform.up, Input.GetAxis("Mouse X")*2f, Space.World);
-                    */
-
+                    myRotationTarget.Rotate(myCameraTransform.right, Input.GetAxis("Mouse Y")*2f, Space.World);
+                    myRotationTarget.Rotate(myCameraTransform.up, Input.GetAxis("Mouse X")*2f, Space.World);
                 }
 
                 if (myObjectIsHeavy)
@@ -225,10 +172,11 @@ public class PlayerAction : MonoBehaviour
 
                 myObjectRigidbody.velocity = myTargetVelocity;
 
-                // target rotation : 3) add get angular velocity
+                // target rotation : 2) add get angular velocity
                 // Rotations stack right to left,
                 // so first we undo our rotation, then apply the target.
-                var delta = myTargetRotation * Quaternion.Inverse(myObjectTaken.rotation);
+                //var delta = myTargetRotation * Quaternion.Inverse(myObjectTaken.rotation);
+                var delta = myRotationTarget.rotation * Quaternion.Inverse(myObjectTaken.rotation);
 
                 float angle; Vector3 axis;
                 delta.ToAngleAxis(out angle, out axis);
@@ -249,8 +197,6 @@ public class PlayerAction : MonoBehaviour
                 myObjectRigidbody.angularVelocity = angular;
             }
         }
-        //myPreviousHandleRotation = myHandlePoint.rotation;
-        myPreviousHandleRotation = myCameraTransform.rotation;
     }
 
     private void TryToTake()
@@ -273,11 +219,9 @@ public class PlayerAction : MonoBehaviour
                 myObjectZOffset = takeable.GetZOffset();
                 myObjectYOffset = takeable.GetYOffset();
                 myObjectIsHeavy = takeable.GetIsHeavy();
-                myTargetRotation = myObjectTaken.rotation;
+                myRotationTarget.rotation = myObjectTaken.rotation;
                 myTargetVelocity = Vector3.zero;
                 myTargetAngularVelocity = Vector3.zero;
-                //myPreviousHandleRotation = myHandlePoint.rotation;
-                myPreviousHandleRotation = myCameraTransform.rotation;
                 myDistancePointer = 0.25f;
                 takeable.Take(this);
             }
@@ -289,7 +233,5 @@ public class PlayerAction : MonoBehaviour
         myObjectTaken.GetComponent<Takeable>().Release();
         myObjectTaken = null;
         myObjectRigidbody = null;
-        //myObjectZOffset = 0f;
-        //myObjectYOffset = 0f;
     }
 }

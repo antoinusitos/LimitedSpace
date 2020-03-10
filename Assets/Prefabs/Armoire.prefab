@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 839440442491962712}
   - component: {fileID: 839440442491962715}
   - component: {fileID: 839440442491962714}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 839440443261925251}
   - component: {fileID: 839440443261925250}
   - component: {fileID: 839440443261925261}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -198,7 +198,7 @@ GameObject:
   - component: {fileID: 839440443450020891}
   - component: {fileID: 839440443450020890}
   - component: {fileID: 839440443450020869}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -291,7 +291,7 @@ GameObject:
   - component: {fileID: 839440443483060724}
   - component: {fileID: 839440443483060727}
   - component: {fileID: 839440443483060726}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -384,7 +384,7 @@ GameObject:
   - component: {fileID: 839440443560428151}
   - component: {fileID: 839440443560428150}
   - component: {fileID: 839440443560428145}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -479,7 +479,7 @@ GameObject:
   - component: {fileID: 9047790452172721558}
   - component: {fileID: 3594851595983365987}
   - component: {fileID: 5294512338935366071}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Armoire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -605,7 +605,7 @@ GameObject:
   - component: {fileID: 839440443795878308}
   - component: {fileID: 839440443795878311}
   - component: {fileID: 839440443795878310}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -698,7 +698,7 @@ GameObject:
   - component: {fileID: 839440444305062443}
   - component: {fileID: 839440444305062442}
   - component: {fileID: 839440444305062421}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

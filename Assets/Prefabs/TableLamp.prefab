@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 171974045}
   - component: {fileID: 171974044}
   - component: {fileID: 171974043}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 1055064237}
   - component: {fileID: 1055064236}
   - component: {fileID: 1055064235}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Foot (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -203,7 +203,7 @@ GameObject:
   - component: {fileID: 7629079853116387896}
   - component: {fileID: 3610940354754956663}
   - component: {fileID: 3572525312596993186}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: TableLamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}

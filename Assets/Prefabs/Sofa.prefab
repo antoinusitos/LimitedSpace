@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 396602951}
   - component: {fileID: 396602952}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Collision
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,7 +61,7 @@ GameObject:
   - component: {fileID: 1963207362537726885}
   - component: {fileID: 1963207362537726884}
   - component: {fileID: 1963207362537726883}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sofa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -916,7 +916,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2853776287099823940}
   - component: {fileID: 4590513482983336536}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Collision (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -960,7 +960,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5555468123003600532}
   - component: {fileID: 1733260270899420468}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Collision (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1004,7 +1004,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8598960429392031568}
   - component: {fileID: 6477329322896081319}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Collision (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
