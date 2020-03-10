@@ -61,9 +61,17 @@ public class PlayerAction : MonoBehaviour
     [SerializeField]
     private float myMaxDistanceModifier = 1f;
 
+    private GameObject dummyRotationGO;
+    private Transform dummyRotationTransform;
+
     private void Start()
     {
         cameraPlayer = GetComponent<CameraPlayer>();
+        dummyRotationGO = new GameObject();
+        dummyRotationTransform = dummyRotationGO.transform;
+        dummyRotationTransform.SetParent(myCameraTransform);
+        dummyRotationTransform.localPosition = Vector3.zero;
+        dummyRotationTransform.localRotation = Quaternion.identity;
     }
 
     private void Update()
@@ -154,13 +162,38 @@ public class PlayerAction : MonoBehaviour
                     myHandleRotation = myCameraTransform.rotation * Quaternion.Inverse(myPreviousHandleRotation);
                     myTargetRotation *= myHandleRotation;
                 }
+                // following works but is the only rotation
+                //myTargetRotation.SetLookRotation(myCameraTransform.forward, Vector3.up);
 
                 // target rotation : 2) add manipulation rotation
                 if (myRotateObjectInstead)
                 {
                     //myTargetRotation *= Quaternion.Euler(new Vector3(Input.GetAxis("Mouse Y"), -Input.GetAxis("Mouse X"), 0f));
+
+                    // following works
+                    
                     myTargetRotation *= Quaternion.AngleAxis(Input.GetAxis("Mouse Y"), myCameraTransform.right);
                     myTargetRotation *= Quaternion.AngleAxis(Input.GetAxis("Mouse X"), myCameraTransform.up);
+                    
+
+                    // following is fix test
+                    /*
+                    dummyRotationTransform.SetParent(myObjectTaken);
+                    dummyRotationTransform.localPosition = Vector3.zero;
+                    dummyRotationTransform.localRotation = Quaternion.identity;
+                    //dummyRotationTransform.rotation = myTargetRotation;
+                    dummyRotationTransform.Rotate(myCameraTransform.right, Input.GetAxis("Mouse Y")*2f, Space.World);
+                    dummyRotationTransform.Rotate(myCameraTransform.up, Input.GetAxis("Mouse X")*2f, Space.World);
+                    //myTargetRotation.SetLookRotation();
+                    myTargetRotation *= dummyRotationTransform.rotation;
+                    */
+                    
+                    // works but doesn't use angular velocity
+                    /*
+                    myObjectTaken.Rotate(myCameraTransform.right, Input.GetAxis("Mouse Y")*2f, Space.World);
+                    myObjectTaken.Rotate(myCameraTransform.up, Input.GetAxis("Mouse X")*2f, Space.World);
+                    */
+
                 }
 
                 if (myObjectIsHeavy)
