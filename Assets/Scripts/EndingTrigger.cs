@@ -14,14 +14,14 @@ public class EndingTrigger : MonoBehaviour
     [SerializeField]
     private Text                    myTextFinish = null;
 
-    [SerializeField]
-    private HouseCheck              myHouseCheck = null;
+    private HouseCheck[]            myHouseCheck = null;
 
     private PhotonView              myPhotonView = null;
 
     private void Start()
     {
         myPhotonView = GetComponent<PhotonView>();
+        myHouseCheck = FindObjectsOfType<HouseCheck>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -67,7 +67,12 @@ public class EndingTrigger : MonoBehaviour
     private void Rpc_StopPlayers()
     {
         myTextFinish.gameObject.SetActive(true);
-        myTextFinish.text = "TOTAL SCORE " + myHouseCheck.GetTotalPoints().ToString();
+        int score = 0;
+        for (int i = 0; i < myHouseCheck.Length; i++)
+        {
+            score += myHouseCheck[i].GetTotalPoints();
+        }
+        myTextFinish.text = "TOTAL SCORE " + score.ToString();
         SoundManager.GetInstance().PlayEndSound();
 
         for (int i = 0; i < myCurrentPlayers.Count; i++)
