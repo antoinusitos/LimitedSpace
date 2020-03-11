@@ -42,7 +42,7 @@ public class Takeable : MonoBehaviour
         myPhotonView = GetComponent<PhotonView>();
         if(myBody==null)
             myBody = GetComponent<Rigidbody>();
-        if (outline.Length == 0)
+        if (outline == null || outline.Length == 0)
         {
             outline = new Outline[1];
             outline[0] = GetComponent<Outline>();
@@ -51,7 +51,6 @@ public class Takeable : MonoBehaviour
         {
             outline[0] = GetComponent<Outline>();
         }
-
     }
 
     public void Take(PlayerAction owner)
@@ -153,10 +152,12 @@ public class Takeable : MonoBehaviour
                 outline[i].enabled = val;
                 outline[i].eraseRenderer = !val;
             }
+            /*
             else
             {
                 outline[i] = GetComponent<Outline>();
             }
+            */
         }
     }
 }
