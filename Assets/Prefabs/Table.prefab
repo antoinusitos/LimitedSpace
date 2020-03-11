@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 0
-  eraseRenderer: 1
+  eraseRenderer: 0
   originalLayer: 0
   originalMaterials: []
 --- !u!1 &5549540100748350456
@@ -217,7 +217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 0
-  eraseRenderer: 1
+  eraseRenderer: 0
   originalLayer: 0
   originalMaterials: []
 --- !u!1 &5549540100802884248
@@ -327,7 +327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 0
-  eraseRenderer: 1
+  eraseRenderer: 0
   originalLayer: 0
   originalMaterials: []
 --- !u!1 &5549540101947937965
@@ -437,7 +437,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 0
-  eraseRenderer: 1
+  eraseRenderer: 0
   originalLayer: 0
   originalMaterials: []
 --- !u!1 &5549540102022615719
@@ -701,6 +701,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 0
-  eraseRenderer: 1
+  eraseRenderer: 0
   originalLayer: 0
   originalMaterials: []

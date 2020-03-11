@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 0
-  eraseRenderer: 1
+  eraseRenderer: 0
   originalLayer: 0
   originalMaterials: []
 --- !u!1 &1055064233
@@ -217,7 +217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 0
-  eraseRenderer: 1
+  eraseRenderer: 0
   originalLayer: 0
   originalMaterials: []
 --- !u!1 &6605027368832901328
@@ -488,6 +488,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 0
-  eraseRenderer: 1
+  eraseRenderer: 0
   originalLayer: 0
   originalMaterials: []

@@ -201,7 +201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 2
-  eraseRenderer: 1
+  eraseRenderer: 0
   originalLayer: 0
   originalMaterials: []
 --- !u!1 &4222983012565193606
@@ -343,7 +343,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 2
-  eraseRenderer: 1
+  eraseRenderer: 0
   originalLayer: 0
   originalMaterials: []
 --- !u!1 &4724290958382508012
@@ -573,7 +573,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 2
-  eraseRenderer: 1
+  eraseRenderer: 0
   originalLayer: 0
   originalMaterials: []
 --- !u!1 &4724290958586098910
@@ -683,7 +683,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 2
-  eraseRenderer: 1
+  eraseRenderer: 0
   originalLayer: 0
   originalMaterials: []
 --- !u!1 &4724290959058778302
@@ -886,7 +886,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 2
-  eraseRenderer: 1
+  eraseRenderer: 0
   originalLayer: 0
   originalMaterials: []
 --- !u!1 &4724290959451652588
@@ -1089,7 +1089,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 2
-  eraseRenderer: 1
+  eraseRenderer: 0
   originalLayer: 0
   originalMaterials: []
 --- !u!1 &6251120810643344118
@@ -1293,7 +1293,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 2
-  eraseRenderer: 1
+  eraseRenderer: 0
   originalLayer: 0
   originalMaterials: []
 --- !u!1 &7912675654777677721
@@ -1403,7 +1403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 2
-  eraseRenderer: 1
+  eraseRenderer: 0
   originalLayer: 0
   originalMaterials: []
 --- !u!1 &8597367821003344944
@@ -1607,6 +1607,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 2
-  eraseRenderer: 1
+  eraseRenderer: 0
   originalLayer: 0
   originalMaterials: []

@@ -42,20 +42,33 @@ namespace cakeslice
         [HideInInspector]
         public Material[] originalMaterials;
 
+        //
+        private bool hasStarted = false;
+        //
+
         private void Awake()
         {
             Renderer = GetComponent<Renderer>();
         }
 
+        private void Start()
+        {
+            hasStarted = true;
+        }
+
         void OnEnable()
         {
-			IEnumerable<OutlineEffect> effects = Camera.allCameras.AsEnumerable()
-				.Select(c => c.GetComponent<OutlineEffect>())
-				.Where(e => e != null);
-
-			foreach (OutlineEffect effect in effects)
+            //if (this.enabled)
+            if (hasStarted)
             {
-                effect.AddOutline(this);
+                IEnumerable<OutlineEffect> effects = Camera.allCameras.AsEnumerable()
+                .Select(c => c.GetComponent<OutlineEffect>())
+                .Where(e => e != null);
+
+                foreach (OutlineEffect effect in effects)
+                {
+                    effect.AddOutline(this);
+                }
             }
         }
 

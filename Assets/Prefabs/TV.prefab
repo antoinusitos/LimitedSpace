@@ -187,7 +187,7 @@ MonoBehaviour:
   myZOffset: 0
   myYOffset: -0.5
   myName: Old PC
-  outline: {fileID: 0}
+  outline: []
 --- !u!114 &161294805324127310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,6 +201,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 2
-  eraseRenderer: 1
+  eraseRenderer: 0
   originalLayer: 0
   originalMaterials: []

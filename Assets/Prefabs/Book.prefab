@@ -172,7 +172,7 @@ MonoBehaviour:
   myZOffset: -0.25
   myYOffset: 0
   myName: Book
-  outline: {fileID: 0}
+  outline: []
 --- !u!114 &5881621557930350870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,6 +221,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 0
-  eraseRenderer: 1
+  eraseRenderer: 0
   originalLayer: 0
   originalMaterials: []
