@@ -47,7 +47,11 @@ public class Takeable : MonoBehaviour
             outline = new Outline[1];
             outline[0] = GetComponent<Outline>();
         }
-            
+        else if (outline[0] == null)
+        {
+            outline[0] = GetComponent<Outline>();
+        }
+
     }
 
     public void Take(PlayerAction owner)
@@ -144,8 +148,15 @@ public class Takeable : MonoBehaviour
     {
         for (int i = 0; i < outline.Length; i++)
         {
-            outline[i].enabled = val;
-            outline[i].eraseRenderer = !val;
+            if (outline[i] != null)
+            {
+                outline[i].enabled = val;
+                outline[i].eraseRenderer = !val;
+            }
+            else
+            {
+                outline[i] = GetComponent<Outline>();
+            }
         }
     }
 }

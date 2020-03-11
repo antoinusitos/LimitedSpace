@@ -1244,7 +1244,8 @@ MonoBehaviour:
   myZOffset: 0.25
   myYOffset: -0.5
   myName: Chair
-  outline: {fileID: 0}
+  outline:
+  - {fileID: -8576202329645557397}
 --- !u!114 &1986580436873183133
 MonoBehaviour:
   m_ObjectHideFlags: 0
