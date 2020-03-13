@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
-using cakeslice;
+using Photon.Pun;
 
 public class PlayerAction : MonoBehaviour
 {
@@ -74,14 +74,20 @@ public class PlayerAction : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI myObjectDescriptionText;
 
+    private PhotonView myPhotonView = null;
+
     private void Start()
     {
         cameraPlayer = GetComponent<CameraPlayer>();
         playerMovement = GetComponent<PlayerMovement>();
+        myPhotonView = GetComponent<PhotonView>();
     }
 
     private void Update()
     {
+        if (!myPhotonView.IsMine)
+            return;
+
         RaycastHit hit;
 
         if (Physics.Raycast(myCameraTransform.position, myCameraTransform.forward, out hit, myTakeDistance, myObjectLayers))
@@ -179,6 +185,9 @@ public class PlayerAction : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!myPhotonView.IsMine)
+            return;
+
         // cancel rotation other than y for first part of gimble (so that the held object stays parallel to ground)
         myHandlePoint.eulerAngles = new Vector3(0f, myHandlePoint.eulerAngles.y, 0f);
 
