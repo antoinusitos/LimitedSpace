@@ -1341,7 +1341,7 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 2
+  OwnershipTransfer: 1
   ObservedComponents:
   - {fileID: 7893528148996987791}
   - {fileID: 3530029857115766850}
